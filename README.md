@@ -26,7 +26,7 @@ This project uses webcam input to detect hand gestures and classify them into AS
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/roystondz/Sign-Language-Recognition.git
 cd sign_language
 ```
 
@@ -64,12 +64,22 @@ python data_collection.py
 - Press 's' to save the current hand gesture
 - Press 'q' to quit
 - Images are saved to the `Data/` directory
+- Each saved image is timestamped to avoid duplicates
+
+**Tips for better training data:**
+- Ensure good lighting and clear hand visibility
+- Capture gestures from different angles and positions
+- Collect at least 50-100 images per gesture class
+- Keep hand centered in the frame when capturing
 
 ## Project Structure
 
 ```
 sign_language/
 ├── Data/              # Training data storage
+│   ├── A/            # Images for gesture A
+│   ├── B/            # Images for gesture B
+│   └── C/            # Images for gesture C
 ├── Model/             # Trained model and labels
 │   ├── keras_model.h5 # TensorFlow model
 │   └── labels.txt     # Class labels
@@ -95,10 +105,50 @@ The model is currently trained to recognize:
 
 ## Training New Gestures
 
-1. Use `data_collection.py` to collect sample images for new gestures
+You have two options for training new gesture models:
+
+### Option 1: Using Google Teachable Machine (Recommended)
+
+Google Teachable Machine provides an easy-to-use web interface for training image classification models:
+
+1. **Collect Training Data:**
+   - Use `data_collection.py` to capture gesture images
+   - Organize images into separate folders for each gesture class
+   - Example structure: `Data/A/`, `Data/B/`, `Data/C/`
+
+2. **Train with Teachable Machine:**
+   - Go to [Teachable Machine](https://teachablemachine.withgoogle.com/)
+   - Select "Image Project" → "Standard Image Model"
+   - Upload your gesture images to different classes
+   - Train the model (this may take a few minutes)
+   - Test the model with the webcam preview
+
+3. **Export the Model:**
+   - Click "Export Model"
+   - Select "TensorFlow" format
+   - Choose "Keras" or "TensorFlow.js" (Keras recommended)
+   - Download the model files
+
+4. **Integrate with Project:**
+   - Replace `Model/keras_model.h5` with the downloaded model
+   - Update `Model/labels.txt` with your class names
+   - Ensure the labels match the order used in Teachable Machine
+
+### Option 2: Custom Training
+
+For advanced users who want to train models locally:
+
+1. Use `data_collection.py` to collect training data
 2. Update the `labels.txt` file with new class names
 3. Train a new model using your preferred deep learning framework
 4. Replace `Model/keras_model.h5` with your trained model
+
+**Teachable Machine Advantages:**
+- No coding required for training
+- Built-in data augmentation
+- Automatic hyperparameter tuning
+- Easy model testing and validation
+- Export in multiple formats
 
 ## System Requirements
 
